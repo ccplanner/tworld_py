@@ -240,22 +240,22 @@ int filewrite(fileinfo *file, void const *data, unsigned long size,
     return fileerr(file, msg);
 }
 
-/* Read one byte as an unsigned integer value.
+/* Read one byte as an uint8_t value.
  */
-int filereadint8(fileinfo *file, unsigned char *val8, char const *msg)
+int filereadint8(fileinfo *file, uint8_t *val8, char const *msg)
 {
     int	byte;
 
     errno = 0;
     if ((byte = fgetc(file->fp)) == EOF)
 	return fileerr(file, msg);
-    *val8 = (unsigned char)byte;
+    *val8 = (uint8_t)byte;
     return TRUE;
 }
 
-/* Write one byte as an unsigned integer value.
+/* Write one byte as an uint8_t value.
  */
-int filewriteint8(fileinfo *file, unsigned char val8, char const *msg)
+int filewriteint8(fileinfo *file, uint8_t val8, char const *msg)
 {
     errno = 0;
     if (fputc(val8, file->fp) != EOF)
@@ -263,9 +263,9 @@ int filewriteint8(fileinfo *file, unsigned char val8, char const *msg)
     return fileerr(file, msg);
 }
 
-/* Read two bytes as an unsigned integer value stored in little-endian.
+/* Read two bytes as an uint16_t value stored in little-endian.
  */
-int filereadint16(fileinfo *file, unsigned short *val16, char const *msg)
+int filereadint16(fileinfo *file, uint16_t *val16, char const *msg)
 {
     int	byte;
 
@@ -280,9 +280,9 @@ int filereadint16(fileinfo *file, unsigned short *val16, char const *msg)
     return fileerr(file, msg);
 }
 
-/* Write two bytes as an unsigned integer value in little-endian.
+/* Write two bytes as an uint16_t value in little-endian.
  */
-int filewriteint16(fileinfo *file, unsigned short val16, char const *msg)
+int filewriteint16(fileinfo *file, uint16_t val16, char const *msg)
 {
     errno = 0;
     if (fputc(val16 & 0xFF, file->fp) != EOF
@@ -291,9 +291,9 @@ int filewriteint16(fileinfo *file, unsigned short val16, char const *msg)
     return fileerr(file, msg);
 }
 
-/* Read four bytes as an unsigned integer value stored in little-endian.
+/* Read four bytes as an uint32_t value stored in little-endian.
  */
-int filereadint32(fileinfo *file, unsigned long *val32, char const *msg)
+int filereadint32(fileinfo *file, uint32_t *val32, char const *msg)
 {
     int	byte;
 
@@ -314,9 +314,9 @@ int filereadint32(fileinfo *file, unsigned long *val32, char const *msg)
     return fileerr(file, msg);
 }
 
-/* Write four bytes as an unsigned integer value in little-endian.
+/* Write four bytes as an uint32_t value in little-endian.
  */
-int filewriteint32(fileinfo *file, unsigned long val32, char const *msg)
+int filewriteint32(fileinfo *file, uint32_t val32, char const *msg)
 {
     errno = 0;
     if (fputc(val32 & 0xFF, file->fp) != EOF

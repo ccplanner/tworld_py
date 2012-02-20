@@ -452,7 +452,7 @@ static int getseriesfile(char *filename, void *data)
     fileinfo		file;
     seriesdata	       *sdata = (seriesdata*)data;
     gameseries	       *series;
-    unsigned long	magic;
+    uint32_t		magic;
     char	       *datfilename;
     int			config, f;
 
