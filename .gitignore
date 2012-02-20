@@ -1,0 +1,13 @@
+# .git ignore
+
+# object and libs
+*.o
+*.a
+
+# generated code
+comptime.h
+oshw-qt/moc_TWMainWnd.cpp
+oshw-qt/ui_TWMainWnd.h
+
+# executable
+tworld2
