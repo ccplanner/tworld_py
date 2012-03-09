@@ -11,3 +11,9 @@ oshw-qt/ui_TWMainWnd.h
 
 # executable
 tworld2
+
+# Level sets
+*.dat
+
+# python 
+build
