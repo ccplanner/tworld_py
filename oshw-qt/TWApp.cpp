@@ -175,10 +175,17 @@ void TileWorldApp::ExitTWorld()
 	// Live with this for now...
 }
 
-
-/* The real main().
+/* A true main so code can be compiled both as python and stand alone
  */
 int main(int argc, char *argv[])
+{
+	return oshw_main(argc, argv);
+}
+
+/* The real meat of main(). Called by the above true main and python
+ * wrapping code.
+ */
+int oshw_main(int argc, char *argv[])
 {
 	for (int i = 1; i < argc; ++i)
 	{

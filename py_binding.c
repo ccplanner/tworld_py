@@ -3,6 +3,7 @@
  */
 
 #include <Python.h>
+#include "oshw.h"
 
 // define main function
 int tworld(int argc, char *argv[]);
@@ -12,12 +13,15 @@ load_level(PyObject *self, PyObject *args)
 {
 	int level;
 	const char *file_name;
-	char* argv[] = {"tworld2", "CCLP2.dac", "foo.tws", "2" };
+	// Full specification of comand line args (crashes)
+	//char* argv[] = {"tworld2", "CCLP2.dac", "foo.tws", "2", NULL };
+	char* argv[] = { NULL };
+	int argc = 0;
 
 	if (!PyArg_ParseTuple(args, "si", &file_name, &level ) )
 		return NULL;
-	// Kick everything off realistically shouldn't return
-	tworld( 4, argv);
+
+	oshw_main(argc, argv);
 	return Py_BuildValue("i", 1);
 }
 

@@ -19,6 +19,8 @@ struct gameseries;
 	#define OSHW_EXTERN extern
 #endif
 
+OSHW_EXTERN int oshw_main(int argc, char *argv[]);
+
 /* This is the declaration of the top layer's main function. It is
  * called directly from the real main() inside the OS/hardware layer.
  */
