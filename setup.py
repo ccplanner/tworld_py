@@ -13,7 +13,7 @@ qt_cpp=['oshw-qt/CCMetaData.cpp',     'oshw-qt/oshwbind.cpp',      'oshw-qt/TWDi
 
 generic=['generic/generic.c',  'generic/_in.cpp',  'generic/tile.c',  'generic/timer.c']
 
-rewriteing = Extension('tworld',
+tileworld = Extension('tworld',
                        #define_macros = [('DUMMY_SFX_IMPL', '1')],
                        sources = ['cmdline.c',  'err.c',       'help.c',
                                   'play.c',      'random.c',  
@@ -26,14 +26,14 @@ rewriteing = Extension('tworld',
                        libraries = ['QtCore', 'QtGui', 'QtXml', 'SDL' ] 
                       )
 
-setup (name = 'SDNA',
-       version = '0.2',
-       description = 'This is the sdna package',
+setup (name = 'Chips Challage Planner',
+       version = '0.1',
+       description = 'The tile world to planner package',
        long_description = """
            2012
        """,
        author='Harry Bullen',
-       author_email='hbullen@i-a-i.com',
+       author_email='hbullen@gmail.com',
        #packages=['tileworld'],
-       ext_modules = [rewriteing]
+       ext_modules = [tileworld]
        )
