@@ -9,3 +9,14 @@ $ python agent.py
 You should be in this directory when you do this.  You will need to select the
 level set manually.  Then provide the first move.  After that the agent will 
 run on it's own.  You will have to kill the program to stop it at this point.
+
+After checking out you need to run make to get things working.  Provide the QTDIR 
+enviroment varible to help out.
+
+$ QTDIR="/usr" make
+
+This should fail with an error about do_move().  That means it did it's job.  After
+this is done.
+
+$ sudo ptyon setup.py install 
+
