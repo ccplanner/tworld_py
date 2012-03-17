@@ -20,7 +20,9 @@
 
 /* The current state of the current game.
  */
-static gamestate	state;
+/* Not static to interact with python bindings, should not be accessed anywhere else.
+ */
+gamestate		state;
 
 /* The current logic module.
  */

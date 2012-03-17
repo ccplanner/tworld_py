@@ -5,9 +5,12 @@
 #include <Python.h>
 #include "oshw.h"
 #include "defs.h"
+#include "state.h"
 
 // define main function
 extern int tworld(int argc, char *argv[]);
+
+extern gamestate state;
 
 static PyObject *agent_callback = NULL;
 
@@ -35,6 +38,34 @@ do_move( )
     // TODO check for over flow
     Py_DECREF(result);
     return move;
+}
+
+static PyObject *
+get_tile(PyObject *self, PyObject *args)
+{
+    int x, y;
+    if (!PyArg_ParseTuple(args, "ii", &x, &y ) )
+	return NULL;
+    // TODO: check that game is running
+    mapcell cell = state.map[y * CXGRID + x];
+    return Py_BuildValue("(i,i)", cell.top.id, cell.bot.id);
+}
+
+static PyObject *
+chips_needed(PyObject *self, PyObject *args)
+{
+    // arguments are null
+    // TODO: check that game is running
+    return Py_BuildValue("i", state.chipsneeded);
+}
+
+static PyObject *
+view_pos(PyObject *self, PyObject *args)
+{
+    // arguemnts are null
+    // TODO: check that game is running
+    // divide by 8 to make the viewpos line up with chips real position 
+    return Py_BuildValue("(i,i)", state.xviewpos / 8 , state.yviewpos / 8);
 }
 
 static PyObject *
@@ -70,7 +101,7 @@ load_level(PyObject *self, PyObject *args)
 	int argc = 0;
 
 	if (!PyArg_ParseTuple(args, "si", &file_name, &level ) )
-		return NULL;
+	    return NULL;
 
 	oshw_main(argc, argv);
 	return Py_BuildValue("i", 1);
@@ -83,6 +114,12 @@ static PyMethodDef TileWorldMethods[] = {
 	 " Level number\n"},
 	{"set_agent",  set_agent, METH_VARARGS,
 	 "Set the agent call back function\n"},
+	{"chips_needed", chips_needed, METH_VARARGS,
+	 "How many chips are needed to exit\n"},
+	{"get_tile",  get_tile, METH_VARARGS,
+	 "Return a tuple (top, bot) of what is at location (x,y)\n"},
+	{"chips_pos",  view_pos, METH_VARARGS,
+	 "Return a tuple (x, y) of the view position\n"},
 	{NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
@@ -96,4 +133,24 @@ inittworld(void)
 	PyModule_AddIntConstant(m, "WEST" , CmdWest );
 	PyModule_AddIntConstant(m, "SOUTH", CmdSouth );
 	PyModule_AddIntConstant(m, "WAIT" , CmdNone );
+
+	/* tile values*/
+	PyModule_AddIntConstant(m, "Empty"	, Empty );
+	PyModule_AddIntConstant(m, "Ice"	, Ice );
+	PyModule_AddIntConstant(m, "Gravel"	, Gravel );
+	PyModule_AddIntConstant(m, "Dirt"	, Dirt );
+	PyModule_AddIntConstant(m, "Water"	, Water );
+	PyModule_AddIntConstant(m, "Fire"	, Fire );
+	PyModule_AddIntConstant(m, "Bomb"	, Bomb );
+	PyModule_AddIntConstant(m, "HintButton"	, HintButton );
+	PyModule_AddIntConstant(m, "Wall"	, Wall );
+	PyModule_AddIntConstant(m, "PopupWall"	, PopupWall );
+	PyModule_AddIntConstant(m, "ICChip"	, ICChip );
+	PyModule_AddIntConstant(m, "Block"	, Block );
+	PyModule_AddIntConstant(m, "Socket"	, Socket );
+	PyModule_AddIntConstant(m, "Exit"	, Block );
+	PyModule_AddIntConstant(m, "Chip_N"	, Chip );
+	PyModule_AddIntConstant(m, "Chip_W"	, Chip + 1 );
+	PyModule_AddIntConstant(m, "Chip_S"	, Chip + 2 );
+	PyModule_AddIntConstant(m, "Chip_E"	, Chip + 3 );
 }
