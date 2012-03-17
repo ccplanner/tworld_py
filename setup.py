@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 
 from distutils.core import setup, Extension
+from datetime import datetime
+
+# setup the comptime.h file
+f = open('comptime.h', 'w')
+f.write( """#define COMPILE_TIME "%s" """ % datetime.now().strftime( '+%Y %b %e %T %Z' ) )
+f.close()
 
 sdl_c=['oshw-sdl/ccicon.c',    'oshw-sdl/sdlerr.c',  'oshw-sdl/sdloshw.c',  'oshw-sdl/sdlsfx.c',
        'oshw-sdl/oshwbind.c',  'oshw-sdl/sdlin.c',   'oshw-sdl/sdlout.c',   'oshw-sdl/sdltext.c',
