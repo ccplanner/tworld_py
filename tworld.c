@@ -1688,7 +1688,12 @@ static int choosegameatstartup(gamespec *gs, startupdata const *start)
 	return 0;
     }
 
-    if (series.count == 1) {
+    /* If their is only one game series and we are going to do something
+     * special with it.  Otherwise the readseriesfile call messes up game
+     * state.
+     */
+    if (series.count == 1 &&
+	    (start->batchverify || start->listscores || start->listtimes) ) {
 	if (start->savefilename)
 	    series.list[0].savefilename = start->savefilename;
 	if (!readseriesfile(series.list)) {
