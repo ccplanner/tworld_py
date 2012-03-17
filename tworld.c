@@ -10,6 +10,7 @@
 #include	<ctype.h>
 #include	"defs.h"
 #include	"err.h"
+#include	"py_binding.h"
 #include	"series.h"
 #include	"res.h"
 #include	"play.h"
@@ -960,13 +961,16 @@ static int playgame(gamespec *gs, int firstcmd)
     setgameplaymode(BeginPlay);
     render = lastrendered = TRUE;
     for (;;) {
+	// XXX this right here is the command tick
 	n = doturn(cmd);
 	drawscreen(render);
 	lastrendered = render;
 	if (n)
 	    break;
 	render = waitfortick() || noframeskip;
-	cmd = input(FALSE);
+	// This how we get a comand from the user
+	// cmd = input(FALSE);
+	cmd = do_move();
 	if (cmd == CmdQuitLevel) {
 	    quitgamestate();
 	    n = -2;
