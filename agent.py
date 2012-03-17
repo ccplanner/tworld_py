@@ -31,7 +31,8 @@ def random_move():
                            tworld.WAIT])
 
 tworld.set_agent( verbose_agent )
-tworld.load_level('sdfjkl',2)
+#tworld.load_level('cc-ms.dac',2)
+tworld.load_level('classical.dac',3)
 
 
 

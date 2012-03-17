@@ -93,24 +93,33 @@ set_agent(PyObject *dummy, PyObject *args)
 static PyObject *
 load_level(PyObject *self, PyObject *args)
 {
-	int level;
-	const char *file_name;
-	// Full specification of comand line args (crashes)
-	//char* argv[] = {"tworld2", "CCLP2.dac", "foo.tws", "2", NULL };
-	char* argv[] = { NULL };
-	int argc = 0;
+	int	     level;
+	char	    *level_str = (char *)malloc(40);
+	const char  *file_name;
 
-	if (!PyArg_ParseTuple(args, "si", &file_name, &level ) )
+	// Full specification of comand line args (crashes)
+	char* argv[] = {"tworld2", "cc-ms.dac", "2", "-p", NULL };
+	const int argc = 4;
+	const int file_arg = 1;
+	const int level_arg = 2;
+
+	if (!PyArg_ParseTuple(args, "si", &file_name, &level) )
 	    return NULL;
+	// set file name and level
+	argv[file_arg] = file_name;
+
+	sprintf(level_str, "%d", level);
+	argv[level_arg] = level_str;
 
 	oshw_main(argc, argv);
+	free( level_str);
 	return Py_BuildValue("i", 1);
 }
 
 static PyMethodDef TileWorldMethods[] = {
 	{"load_level",  load_level, METH_VARARGS,
 	 "Load a level to play with python code:\n"
-	 " File name of *.dat file\n"
+	 " File name of *.dac file\n"
 	 " Level number\n"},
 	{"set_agent",  set_agent, METH_VARARGS,
 	 "Set the agent call back function\n"},
