@@ -967,7 +967,7 @@ static int playgame(gamespec *gs, int firstcmd)
 	lastrendered = render;
 	if (n)
 	    break;
-	render = waitfortick() || noframeskip;
+	//render = waitfortick() || noframeskip;
 	// This how we get a comand from the user
 	// cmd = input(FALSE);
 	cmd = do_move();
@@ -1764,7 +1764,9 @@ int tworld(int argc, char *argv[])
 	cleardisplay();
 	strcpy(lastseries, spec.series.filebase);
 	freeseriesdata(&spec.series);
-	f = choosegame(&spec, lastseries);
+	// XXX
+	//f = choosegame(&spec, lastseries);
+	f = 0;
     } while (f > 0);
 
     shutdownsystem();

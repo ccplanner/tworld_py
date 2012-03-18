@@ -31,7 +31,8 @@ do_move( )
     result = PyObject_CallObject(agent_callback, NULL);
     if ( result == NULL ) {
 	// Really we should find a way to return this error
-	PyErr_Clear();
+	// XXX now we crash thru to the end
+	// PyErr_Clear();
 	return CmdQuitLevel; // Error so quit
     }
     move = PyInt_AsLong(result);
@@ -139,7 +140,9 @@ load_level(PyObject *self, PyObject *args)
 
 	oshw_main(argc, argv);
 	free( level_str);
-	return Py_BuildValue("i", 1);
+	//return Py_BuildValue("i", 1);
+	// always crash
+	return NULL;
 }
 
 static PyMethodDef TileWorldMethods[] = {
