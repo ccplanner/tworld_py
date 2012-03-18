@@ -60,6 +60,32 @@ chips_needed(PyObject *self, PyObject *args)
 }
 
 static PyObject *
+get_boots(PyObject *self, PyObject *args)
+{
+    // arguments are null
+    // TODO: check that game is running
+    return Py_BuildValue("(b,b,b,b)", iceboots(state), slideboots(state), 
+		    fireboots(state), waterboots(state));
+}
+
+static PyObject *
+get_keys(PyObject *self, PyObject *args)
+{
+    // arguments are null
+    // TODO: check that game is running
+    return Py_BuildValue("(i,i,i,i)", redkeys(state), bluekeys(state), 
+		    yellowkeys(state), greenkeys(state));
+}
+
+static PyObject *
+time_left(PyObject *self, PyObject *args)
+{
+    // arguments are null
+    // TODO: check that game is running
+    return Py_BuildValue("i", state.timelimit - state.currenttime);
+}
+
+static PyObject *
 view_pos(PyObject *self, PyObject *args)
 {
     // arguemnts are null
@@ -127,6 +153,12 @@ static PyMethodDef TileWorldMethods[] = {
 	 "How many chips are needed to exit\n"},
 	{"get_tile",  get_tile, METH_VARARGS,
 	 "Return a tuple (top, bot) of what is at location (x,y)\n"},
+	{"get_keys",  get_keys, METH_VARARGS,
+	 "Return a tuple (redkeys, bluekeys, yellowkeys, greenkeys) that chip has.\n"},
+	{"get_boots",  get_boots, METH_VARARGS,
+	 "Return a tuple (ice, suction, fire, water) boot status (True, False).\n"},
+	{"time_left",  time_left, METH_VARARGS,
+	 "Returns how many ticks are left in the game.\n"},
 	{"chips_pos",  view_pos, METH_VARARGS,
 	 "Return a tuple (x, y) of the view position\n"},
 	{NULL, NULL, 0, NULL}        /* Sentinel */

@@ -18,6 +18,8 @@ def verbose_agent():
     """print out lots of debug and then return a random direction"""
     print_board(9,9)
     x,y = tworld.chips_pos()
+    print "Keys R:%d B:%d Y:%d G:%d" % tworld.get_keys()
+    print "Boots Ice:%d Suction:%d Fire:%d Water:%d" % tworld.get_boots()
     print "(%d,%d)" % (x, y)
     print "Chips left: %d" % tworld.chips_needed()
     return random_move()

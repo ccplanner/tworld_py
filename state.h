@@ -239,13 +239,13 @@ typedef struct gamestate {
 
 /* Macros for the keys and boots.
  */
-#define	redkeys(st)		((st)->keys[0])
-#define	bluekeys(st)		((st)->keys[1])
-#define	yellowkeys(st)		((st)->keys[2])
-#define	greenkeys(st)		((st)->keys[3])
-#define	iceboots(st)		((st)->boots[0])
-#define	slideboots(st)		((st)->boots[1])
-#define	fireboots(st)		((st)->boots[2])
-#define	waterboots(st)		((st)->boots[3])
+#define	redkeys(st)		((st).keys[0])
+#define	bluekeys(st)		((st).keys[1])
+#define	yellowkeys(st)		((st).keys[2])
+#define	greenkeys(st)		((st).keys[3])
+#define	iceboots(st)		((st).boots[0])
+#define	slideboots(st)		((st).boots[1])
+#define	fireboots(st)		((st).boots[2])
+#define	waterboots(st)		((st).boots[3])
 
 #endif
