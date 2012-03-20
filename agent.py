@@ -1,6 +1,7 @@
 #!/usr/env/python2
 import tworld
 import random
+import time
 
 def print_board(x_max=32,y_max=32):
     """note x_max and y_max are then number of tiles printed in that 
@@ -26,6 +27,7 @@ def verbose_agent():
 
 def random_move():
     """make random moves"""
+    time.sleep(1)
     return random.choice( [tworld.NORTH, 
                            tworld.SOUTH, 
                            tworld.EAST, 
@@ -35,6 +37,3 @@ def random_move():
 tworld.set_agent( verbose_agent )
 #tworld.load_level('cc-ms.dac',2)
 tworld.load_level('classical.dac',3)
-
-
-
