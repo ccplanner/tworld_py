@@ -961,16 +961,13 @@ static int playgame(gamespec *gs, int firstcmd)
     setgameplaymode(BeginPlay);
     render = lastrendered = TRUE;
     for (;;) {
-	// XXX this right here is the command tick
 	n = doturn(cmd);
 	drawscreen(render);
 	lastrendered = render;
 	if (n)
 	    break;
-	//render = waitfortick() || noframeskip;
-	// This how we get a comand from the user
-	// cmd = input(FALSE);
-	cmd = do_move();
+	render = waitfortick() || noframeskip;
+	cmd = input(FALSE);
 	if (cmd == CmdQuitLevel) {
 	    quitgamestate();
 	    n = -2;
@@ -1160,6 +1157,86 @@ static int playbackgame(gamespec *gs)
     return FALSE;
 }
 
+/* Play automatically by making a call to do_move() in the 
+ * python bindings.  This is actually done every tick even
+ * though the AI can't make a decision every tick.  It 
+ * should be like playgame(), with a possible speed up/slow
+ * down from the playbackgame().
+ */
+static int playautogame(gamespec *gs)
+{
+    int	render, lastrendered, n, cmd;
+    drawscreen(TRUE);
+
+    gs->status = 0;
+    setgameplaymode(BeginPlay);
+    render = lastrendered = TRUE;
+    for (;;) {
+	cmd = do_move();
+	n = doturn(cmd);
+	drawscreen(TRUE);
+	if (n)
+	    break;
+	advancetick();
+	cmd = input(FALSE);
+
+	switch (cmd) {
+	  case CmdPrevLevel:	changecurrentgame(gs, -1);	goto quitloop;
+	  case CmdNextLevel:	changecurrentgame(gs, +1);	goto quitloop;
+	  case CmdSameLevel:					goto quitloop;
+	  case CmdPlayback:					goto quitloop;
+	  case CmdQuitLevel:					goto quitloop;
+	  case CmdQuit:						exit(0);
+	  case CmdVolumeUp:
+	    changevolume(+2, TRUE);
+	    break;
+	  case CmdVolumeDown:
+	    changevolume(-2, TRUE);
+	    break;
+	  case CmdPauseGame:
+	    setgameplaymode(SuspendPlay);
+	    setdisplaymsg("(paused)", 1, 1);
+	    for (;;) {
+		switch (input(TRUE)) {
+		  case CmdQuit:		exit(0);
+		  case CmdPauseGame:	break;
+		  default:		continue;
+		}
+		break;
+	    }
+	    setgameplaymode(ResumePlay);
+	    break;
+	  case CmdHelp:
+	    setgameplaymode(SuspendPlay);
+	    dohelp(Help_None);
+	    setgameplaymode(ResumePlay);
+	    break;
+	}
+    }
+    if (!lastrendered)
+	drawscreen(TRUE);
+    setgameplaymode(EndPlay);
+    gs->playmode = Play_None;
+    if (n < 0)
+	replaceablesolution(gs, +1);
+    if (n > 0) {
+	if (checksolution())
+	    savesolutions(&gs->series);
+	if (islastinseries(gs, gs->currentgame))
+	    n = 0;
+    }
+    gs->status = n;
+    return TRUE;
+
+  quitloop:
+    if (!lastrendered)
+	drawscreen(TRUE);
+    quitgamestate();
+    setgameplaymode(EndPlay);
+    gs->playmode = Play_None;
+    return FALSE;
+}
+
 /* Quickly play back the user's best solution for the current level
  * without rendering and without using the timer the keyboard. The
  * playback stops when the solution is finished or gameplay has
@@ -1247,7 +1324,8 @@ static int runcurrentlevel(gamespec *gs)
 	if (cmd != CmdNone) {
 	    if (valid) {
 		switch (gs->playmode) {
-		  case Play_Normal:	f = playgame(gs, cmd);		break;
+		  //case Play_Normal:	f = playgame(gs, cmd);		break;
+		  case Play_Normal:	f = playautogame(gs);		break;
 		  case Play_Back:	f = playbackgame(gs);		break;
 		  case Play_Verify:	f = verifyplayback(gs);		break;
 		  default:		f = FALSE;			break;
@@ -1757,17 +1835,13 @@ int tworld(int argc, char *argv[])
     else if (f == 0)
 	return EXIT_SUCCESS;
 
-    do {
-	pushsubtitle(NULL);
-	while (runcurrentlevel(&spec)) ;
-	popsubtitle();
-	cleardisplay();
-	strcpy(lastseries, spec.series.filebase);
-	freeseriesdata(&spec.series);
-	// XXX
-	//f = choosegame(&spec, lastseries);
-	f = 0;
-    } while (f > 0);
+    pushsubtitle(NULL);
+    while (runcurrentlevel(&spec)) ;
+    popsubtitle();
+    cleardisplay();
+    strcpy(lastseries, spec.series.filebase);
+    freeseriesdata(&spec.series);
+    /* Only get one level set and then exit */
 
     shutdownsystem();
     return f == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
