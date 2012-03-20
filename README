@@ -20,3 +20,11 @@ this is done.
 
 $ sudo ptyon setup.py install 
 
+Also make sure SDL-dev is installed
+Ensure the QT is set to 4, as well as moc and uic under debian do:
+sudo update-alternatives --config qmake
+sudo update-alternatives --config moc
+sudo update-alternatives --config uic
+
+make moc_TWMainWnd.cpp
+Check README.tileworld for more infomation
