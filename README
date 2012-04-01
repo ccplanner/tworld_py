@@ -6,6 +6,10 @@ then run agent.py
 
 $ python agent.py
 
+Requires
+
+sudo apt-get install python python-dev qt qt4-qmake libqt4-dev libsdl-dev
+
 You should be in this directory when you do this.  You will need to select the
 level set manually.  Then provide the first move.  After that the agent will 
 run on it's own.  You will have to kill the program to stop it at this point.
@@ -13,18 +17,24 @@ run on it's own.  You will have to kill the program to stop it at this point.
 After checking out you need to run make to get things working.  Provide the QTDIR 
 enviroment varible to help out.
 
-$ QTDIR="/usr" make
-
-This should fail with an error about do_move().  That means it did it's job.  After
-this is done.
-
-$ sudo ptyon setup.py install 
-
 Also make sure SDL-dev is installed
 Ensure the QT is set to 4, as well as moc and uic under debian do:
 sudo update-alternatives --config qmake
 sudo update-alternatives --config moc
 sudo update-alternatives --config uic
 
+$ make
+
+This should fail with an error about do_move().  That means it did it's job.  After
+tworld.c:(.text+0x29a4): undefined reference to `do_move'
+this is done.
+
+$ sudo python setup.py install 
+
+
 make moc_TWMainWnd.cpp
 Check README.tileworld for more infomation
+
+Also needed to do is to setup levelsets, you can create soft links from 
+levelset/data/*.dat to data/*.dat
+and from levelset/sets/*.dac to sets/*.dac
