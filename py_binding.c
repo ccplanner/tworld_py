@@ -145,11 +145,35 @@ load_level(PyObject *self, PyObject *args)
 	return NULL;
 }
 
+static PyObject *
+batch_verify(PyObject *self, PyObject *args)
+{
+	const char  *file_name;
+
+	// Full specification of comand line args (crashes)
+	char* argv[] = {"tworld2", "cc-ms.dac", "2", "-p", "-b", NULL };
+	const int argc = 5;
+	const int file_arg = 1;
+
+	if (!PyArg_ParseTuple(args, "s", &file_name) )
+	    return NULL;
+	// set file name and level
+	argv[file_arg] = file_name;
+
+	oshw_main(argc, argv);
+	//return Py_BuildValue("i", 1);
+	// always crash
+	return NULL;
+}
+
 static PyMethodDef TileWorldMethods[] = {
 	{"load_level",  load_level, METH_VARARGS,
 	 "Load a level to play with python code:\n"
 	 " File name of *.dac file\n"
 	 " Level number\n"},
+	{"batch_verify",  batch_verify, METH_VARARGS,
+	 "Automatically verify a levelset:\n"
+	 " File name of *.dac file\n"},
 	{"set_agent",  set_agent, METH_VARARGS,
 	 "Set the agent call back function\n"},
 	{"chips_needed", chips_needed, METH_VARARGS,

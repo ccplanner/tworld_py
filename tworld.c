@@ -1350,16 +1350,16 @@ static int batchverify(gameseries *series, int display)
     batchmode = TRUE;
 
     for (i = 0, game = series->games ; i < series->count ; ++i, ++game) {
-	if (!hassolution(game))
-	    continue;
-	if (initgamestate(game, series->ruleset) && prepareplayback()) {
+	if (initgamestate(game, series->ruleset) ){
 	    setgameplaymode(BeginVerify);
-	    while (!(f = doturn(CmdNone)))
+	    // call planner
+	    while (!(f = doturn(do_move())))
 		advancetick();
 	    setgameplaymode(EndVerify);
 	    if (f > 0) {
 		++valid;
 		checksolution();
+		printf("Solution for level %d is valid\n", game->number);
 	    } else {
 		++invalid;
 		game->sgflags |= SGF_REPLACEABLE;
